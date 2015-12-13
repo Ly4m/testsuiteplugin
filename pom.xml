@@ -16,14 +16,13 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>fil.iagl.opl.testsuiteplugin</groupId>-->
-            <!--<artifactId>testsuiteplugin-maven-plugin</artifactId>-->
-            <!--<version>1.0-SNAPSHOT</version>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>fil.iagl.opl.testsuiteplugin</groupId>
+                <artifactId>testsuiteplugin-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </plugin>
         </plugins>
     </build>
-
     <name>testsuiteplugin Maven Mojo</name>
 
     <url>http://maven.apache.org</url>
@@ -42,11 +41,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <!--<build>-->
-        <!--<plugins>-->
-
-        <!--</plugins>-->
-    <!--</build>-->
 
 </project>

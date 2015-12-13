@@ -69,10 +69,7 @@ public class XMLParser {
             }
 
         }
-
-        tests.forEach((key, value) -> System.out.println(key + " " +  value));
-
-    }
+        }
 
 
 

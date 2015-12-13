@@ -30,7 +30,7 @@ public class testOrdonnancer extends AbstractMojo {
 
     public void execute()
             throws MojoExecutionException {
-//        getLog().info(filePath);
+        getLog().info("coucou");
         XMLParser parser = new XMLParser("C:\\Users\\William\\IdeaProjects\\timeline\\target\\pit-reports\\201512121753\\mutations.xml");
         parser.init();
 
