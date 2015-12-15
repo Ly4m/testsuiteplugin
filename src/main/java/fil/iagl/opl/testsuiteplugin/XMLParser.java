@@ -86,18 +86,23 @@ public class XMLParser {
 
                     try {
                         String killingTest = eElement.getElementsByTagName("killingTest").item(0).getTextContent().split("\\(")[0];
-                        System.out.println("COUCOU " + killingTest);
                         String[] testSplit = killingTest.split("\\.");
-                        killingTest = testSplit[testSplit.length-1];
+                        killingTest = testSplit[0];
+
+                        for (int i = 1; i < testSplit.length - 1; i++) {
+                            killingTest += ("." + testSplit[i]);
+                        }
+
                         tests.put(killingTest, tests.containsKey(killingTest) ? ((Integer) tests.get(killingTest) + 1) : 1);
 
                         List<Class> testCases = new ArrayList<Class>();
 
-                        try {
-                            testCases.add(Class.forName(killingTest));
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
+
+//                        try {
+//                            testCases.add(Class.forName(killingTest));
+//                        } catch (ClassNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;

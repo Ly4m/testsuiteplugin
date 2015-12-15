@@ -22,6 +22,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 
 /**
@@ -49,6 +52,17 @@ public class testOrdonnancer extends AbstractMojo {
 //        for (Map.Entry<String, Integer> entry : map.entrySet()) {
 //            getLog().info("-------  Test : " + entry.getKey() + " SCORE : " + entry.getValue() + " ---------");
 //        }
+
+        try {
+            URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{new URL("file:///C:/Users/willl/IdeaProjects/commons-math/target/classes")});
+            System.out.println(urlClassLoader.getURLs()[0]  + "=================");
+            Class c = urlClassLoader.loadClass("org.apache.commons.math4.util.FastMath");
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 }
