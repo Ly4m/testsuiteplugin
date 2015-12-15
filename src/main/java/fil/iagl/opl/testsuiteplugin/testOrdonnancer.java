@@ -18,21 +18,37 @@ package fil.iagl.opl.testsuiteplugin;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.File;
+import java.util.HashMap;
 
 /**
  * A goal to generate code.
- *
- * @goal test
  */
+@Mojo(name = "ordonnancer")
 public class testOrdonnancer extends AbstractMojo {
 
+    /**
+     * My file :)
+     */
+    @Parameter
+    private File pittestReport;
 
-    public void execute()
-            throws MojoExecutionException {
-        getLog().info("coucou");
-        XMLParser parser = new XMLParser("C:\\Users\\William\\IdeaProjects\\timeline\\target\\pit-reports\\201512121753\\mutations.xml");
-        parser.init();
+    public void execute() throws MojoExecutionException {
+        getLog().info("===== PLUGIN ORDONNANCER =====");
+
+        XMLParser parser = new XMLParser(pittestReport);
+//        parser.initTestList();
+        parser.initDoc();
+
+
+        HashMap<String, Integer> map = (HashMap<String, Integer>) parser.getTests();
+
+//        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+//            getLog().info("-------  Test : " + entry.getKey() + " SCORE : " + entry.getValue() + " ---------");
+//        }
 
     }
 }

@@ -9,12 +9,11 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,23 +22,25 @@ import java.util.Map;
 public class XMLParser {
 
     File xmlFile;
+    File surefireReport;
     Document doc;
+    Document surefireReportDoc;
 
     Map tests;
 
-    public XMLParser(String path){
+
+    public XMLParser(File file) {
         try {
 
-            URL url = getClass().getResource("/config");
-            BufferedReader read = new BufferedReader(new InputStreamReader(url.openStream()));
-
-
-            this.xmlFile = new File(path);
-            this.tests = new HashMap();
+            this.xmlFile = file;
+//            this.surefireReport = surefireReport;
+            this.tests = new HashMap<String, Integer>();
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             this.doc = dBuilder.parse(xmlFile);
+//            this.surefireReportDoc = dBuilder.parse(surefireReport);
+//            surefireReportDoc.getDocumentElement().normalize();
             doc.getDocumentElement().normalize();
 
         } catch (IOException e) {
@@ -51,26 +52,67 @@ public class XMLParser {
         }
     }
 
-    public void init(){
+//    public void initTestList() {
+//        NodeList nList = this.surefireReportDoc.getElementsByTagName("testcase");
+//        for (int temp = 0; temp < nList.getLength(); temp++) {
+//            Node nNode = nList.item(temp);
+//
+//            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+//                Element eElement = (Element) nNode;
+//
+//                System.out.println(eElement);
+//                final String className = eElement.getAttribute("classname");
+////                final String methodName = eElement.getAttribute("name");
+//                tests.put(className, 0);
+//
+//
+//            }
+//
+//        }
+//    }
+
+    public void initDoc() {
         NodeList nList = this.doc.getElementsByTagName("mutation");
 
-        for(int temp = 0; temp < nList.getLength(); temp++){
+        for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
-
-            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
+                if (eElement.getAttribute("status").equals("KILLED")) {
+//                    System.out.println(eElement.getElementsByTagName("killingTest").item(0).getTextContent());
+//                    final String killingTest = eElement.getElementsByTagName("killingTest").item(0).getTextContent().split("\\(")[1].split("\\)")[0];
+//                    System.out.println(eElement.getElementsByTagName("killingTest").item(0).getTextContent());
 
-                if(eElement.getAttribute("status").equals("KILLED")){
 
-                    final String killingTest = eElement.getElementsByTagName("killingTest").item(0).getTextContent();
-                    tests.put(killingTest, tests.containsKey(killingTest) ? ((Integer) tests.get(killingTest) + 1 ) : 1);
+                    try {
+                        String killingTest = eElement.getElementsByTagName("killingTest").item(0).getTextContent().split("\\(")[0];
+                        System.out.println("COUCOU " + killingTest);
+                        String[] testSplit = killingTest.split("\\.");
+                        killingTest = testSplit[testSplit.length-1];
+                        tests.put(killingTest, tests.containsKey(killingTest) ? ((Integer) tests.get(killingTest) + 1) : 1);
+
+                        List<Class> testCases = new ArrayList<Class>();
+
+                        try {
+                            testCases.add(Class.forName(killingTest));
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+
 
                 }
             }
 
         }
-        }
+    }
 
+    public Map getTests() {
+        return tests;
+    }
 
 
 }
